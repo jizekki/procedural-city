@@ -75,11 +75,21 @@ public class VoronoiDemo : MonoBehaviour
 		//List<float> rdmP = new List<float>;
 		for (int k = 0; k < lenRdm; k++)
         {
-			float randpos = Random.value;
+        
+			float randpos = 0.6f;//Random.value; 0.8
+      Debug.Log(randpos);
 			float rot = Vector2.SignedAngle(Vector2.right, v2 - v1);
 			Vector3 posx = new Vector3(v1.y + randpos * pointer.y, 0, v1.x + randpos * pointer.x);
 			GameObject housex = Instantiate(building, posx, Quaternion.Euler(0, 90 + rot, 0));
 			housesSpawned.Add(housex);
+
+      float randpos2 = 0.67f;//Random.value; 0.8
+      Vector3 posx2 = new Vector3(v1.y + randpos2 * pointer.y, 0, v1.x + randpos2 * pointer.x);
+      GameObject housex2 = Instantiate(building, posx2, Quaternion.Euler(0, 90 + rot, 0));
+			housesSpawned.Add(housex2);
+
+
+
 		}
 	}
 
