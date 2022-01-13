@@ -8,15 +8,16 @@ public class VoronoiDemo : MonoBehaviour
 
     public Material land;
     public Texture2D tx;
-    public const int NPOINTS = 100;
+    public const int NPOINTS = 50;
     public const int WIDTH = 200;
     public const int HEIGHT = 200;
-	public GameObject road;
+	public GameObject road, building;
 
     private List<Vector2> m_points;
 	private List<LineSegment> m_edges = null;
 	private List<LineSegment> m_spanningTree;
 	private List<LineSegment> m_delaunayTriangulation;
+	private List<GameObject> housesSpawned = new List<GameObject>();
 
     private float [,] createMap() 
     {
@@ -31,7 +32,7 @@ public class VoronoiDemo : MonoBehaviour
 	{
         float [,] map=createMap();
         Color[] pixels = createPixelMap(map);
-		Debug.Log(pixels[0]);
+		//Debug.Log(pixels[0]);
         /* Create random points points */
 		m_points = new List<Vector2> ();
 		List<uint> colors = new List<uint> ();
@@ -63,12 +64,53 @@ public class VoronoiDemo : MonoBehaviour
 			r.transform.LookAt(rightScaled);
 			r.transform.localScale = new Vector3(r.transform.localScale.x, r.transform.localScale.y, size);
 			r.transform.position = (leftScaled + rightScaled) / 2;
-
-			
-			DrawLine (pixels, left, right, color);
+      buildNearHouses((left/ WIDTH * 10 - new Vector2(5f,5f)) * 1, (right/ WIDTH * 10 - new Vector2(5f,5f)) * 1);  
+			//DrawLine (pixels, left, right, color);
 		}
+	 void buildNearHousesOneSide(Vector2 v1, Vector2 v2)
+    {
+		Vector2 pointer = v2 - v1;
+		float rnb = Vector2.Distance(v1, v2) / 0.30f; // Maximum number of buildings
+		int lenRdm = (int)rnb;
+		//List<float> rdmP = new List<float>;
+		for (int k = 0; k < lenRdm; k++)
+        {
+			float randpos = Random.value;
+			float rot = Vector2.SignedAngle(Vector2.right, v2 - v1);
+			Vector3 posx = new Vector3(v1.y + randpos * pointer.y, 0, v1.x + randpos * pointer.x);
+			GameObject housex = Instantiate(building, posx, Quaternion.Euler(0, 90 + rot, 0));
+			housesSpawned.Add(housex);
+		}
+	}
 
+	void buildNearHouses(Vector2 v1, Vector2 v2)
+	{
+		buildNearHousesOneSide(v1, v2);
+		buildNearHousesOneSide(v2, v1);
+	}
 
+/*
+ void buildNearHouses(Vector2 v1, Vector2 v2)
+	{
+		buildNearHousesOneSide(v1, v2);
+		//buildNearHousesOneSide(v2, v1);
+	}*/
+/*
+   void buildNearHousesOneSide(Vector2 v1, Vector2 v2)
+    {
+		Vector2 pointer = v2 - v1;
+		float rnb = Vector2.Distance(v1, v2) / 0.30f; // Maximum number of buildings
+		int lenRdm = (int)rnb;
+		//List<float> rdmP = new List<float>;
+		for (int k = 0; k < lenRdm; k++)
+        {
+			float randpos = Random.value;
+			float rot = Vector2.SignedAngle(Vector2.right, v2 - v1);
+			Vector3 posx = new Vector3(v1.y + randpos * pointer.y, 0, v1.x + randpos * pointer.x);
+			GameObject housex = Instantiate(building, posx, Quaternion.Euler(0, 90 + rot, 0));
+			housesSpawned.Add(housex);
+		}
+	}*/
 		color = Color.red;
 		/* Shows Delaunay triangulation */
 		/*if (m_delaunayTriangulation != null) {
