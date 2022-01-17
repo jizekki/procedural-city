@@ -82,11 +82,12 @@ public class VoronoiDemo : MonoBehaviour
 		for (int k = 0; k < lenRdm; k++)
         {
         
-			float randpos = 0.6f;//Random.value; 0.8
+			float randpos = 0.6f; // Position on road
 			float rot = Vector2.SignedAngle(Vector2.right, v2 - v1);
 			Vector3 posx = new Vector3(v1.y + randpos * pointer.y, 0, v1.x + randpos * pointer.x);
       
-      if (sz <0.8){
+      if (sz <0.8){ // if road size < 0.8 => concentration of population => concentration of skyscrapers (not always true)
+        // Area of Skyscrapers
         Debug.Log(sz);
         GameObject building = Instantiate(skyscraper, posx, Quaternion.Euler(0, 90 + rot, 0));
 			  housesSpawned.Add(building);
@@ -94,18 +95,12 @@ public class VoronoiDemo : MonoBehaviour
       }
 
       if (sz >=0.8){
+        // Area of houses
         Debug.Log(sz);
         GameObject building = Instantiate(house, posx, Quaternion.Euler(0, 90 + rot, 0));
 			  housesSpawned.Add(house);
 
-      }
-			  
-      float randpos2 = 0.67f;//Random.value; 0.8
-      Vector3 posx2 = new Vector3(v1.y + randpos2 * pointer.y, 0, v1.x + randpos2 * pointer.x);
-      //GameObject housex2 = Instantiate(building, posx2, Quaternion.Euler(0, 90 + rot, 0));
-			//housesSpawned.Add(housex2);
-
-
+      } 
 
 		}
 	}
@@ -116,50 +111,7 @@ public class VoronoiDemo : MonoBehaviour
 		buildNearHousesOneSide(v2, v1, sz);
 	}
 
-/*
- void buildNearHouses(Vector2 v1, Vector2 v2)
-	{
-		buildNearHousesOneSide(v1, v2);
-		//buildNearHousesOneSide(v2, v1);
-	}*/
-/*
-   void buildNearHousesOneSide(Vector2 v1, Vector2 v2)
-    {
-		Vector2 pointer = v2 - v1;
-		float rnb = Vector2.Distance(v1, v2) / 0.30f; // Maximum number of buildings
-		int lenRdm = (int)rnb;
-		//List<float> rdmP = new List<float>;
-		for (int k = 0; k < lenRdm; k++)
-        {
-			float randpos = Random.value;
-			float rot = Vector2.SignedAngle(Vector2.right, v2 - v1);
-			Vector3 posx = new Vector3(v1.y + randpos * pointer.y, 0, v1.x + randpos * pointer.x);
-			GameObject housex = Instantiate(building, posx, Quaternion.Euler(0, 90 + rot, 0));
-			housesSpawned.Add(housex);
-		}
-	}*/
 		color = Color.red;
-		/* Shows Delaunay triangulation */
-		/*if (m_delaunayTriangulation != null) {
-			for (int i = 0; i < m_delaunayTriangulation.Count; i++) {
-					LineSegment seg = m_delaunayTriangulation [i];				
-					Vector2 left = (Vector2)seg.p0;
-					Vector2 right = (Vector2)seg.p1;
-					DrawLine (pixels,left, right,color);
-			}
-		}*/
-
-        /* Shows spanning tree */
-        /*
-		color = Color.black;
-		if (m_spanningTree != null) {
-			for (int i = 0; i< m_spanningTree.Count; i++) {
-				LineSegment seg = m_spanningTree [i];				
-				Vector2 left = (Vector2)seg.p0;
-				Vector2 right = (Vector2)seg.p1;
-				DrawLine (pixels,left, right,color);
-			}
-		}*/
         /* Apply pixels to texture */
         tx = new Texture2D(WIDTH, HEIGHT);
         land.SetTexture ("_MainTex", tx);
