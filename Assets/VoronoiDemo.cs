@@ -11,7 +11,7 @@ public class VoronoiDemo : MonoBehaviour
     public const int NPOINTS = 60;
     public const int WIDTH = 200;
     public const int HEIGHT = 200;
-	public GameObject road, skyscraper, house;
+	public GameObject road, bicycleRoad, skyscraper, house;
 
     private List<Vector2> m_points;
 	private List<LineSegment> m_edges = null;
@@ -57,7 +57,13 @@ public class VoronoiDemo : MonoBehaviour
 			LineSegment seg = m_edges [i];				
 			Vector2 left = (Vector2)seg.p0;
 			Vector3 leftScaled = new Vector3(left.y * 10f / WIDTH - 5f, 0.0f, left.x * 10f / HEIGHT - 5f);
-			GameObject r = GameObject.Instantiate(road, leftScaled, Quaternion.identity);
+			GameObject r ;
+      if (i%7==0){
+        r =  GameObject.Instantiate(bicycleRoad, leftScaled, Quaternion.identity);
+      }
+      else {
+        r = GameObject.Instantiate(road, leftScaled, Quaternion.identity);
+      }
 			Vector2 right = (Vector2)seg.p1;
 			Vector3 rightScaled = new Vector3(right.y * 10f / WIDTH - 5f, r.transform.position.y, right.x * 10f / HEIGHT - 5f);
 			float size = Vector2.Distance(new Vector2(left.x * 10f / WIDTH, left.y * 10f / HEIGHT), new Vector2(right.x * 10f / WIDTH, right.y * 10f / HEIGHT));

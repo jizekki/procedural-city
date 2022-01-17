@@ -9,11 +9,15 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1453003999900833664, guid: 9c1b7895eaec9e24dad562507f8a6da7, type: 3}
       propertyPath: m_Name
-      value: VeloRoute
+      value: VeloRoute Variant
       objectReference: {fileID: 0}
     - target: {fileID: 3292705349717338341, guid: 9c1b7895eaec9e24dad562507f8a6da7, type: 3}
       propertyPath: m_RootOrder
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3292705349717338341, guid: 9c1b7895eaec9e24dad562507f8a6da7, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.1
       objectReference: {fileID: 0}
     - target: {fileID: 3292705349717338341, guid: 9c1b7895eaec9e24dad562507f8a6da7, type: 3}
       propertyPath: m_LocalPosition.x
