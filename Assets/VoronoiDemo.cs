@@ -8,10 +8,10 @@ public class VoronoiDemo : MonoBehaviour
 
     public Material land;
     public Texture2D tx;
-    public const int NPOINTS = 50;
+    public const int NPOINTS = 60;
     public const int WIDTH = 200;
     public const int HEIGHT = 200;
-	public GameObject road, building;
+	public GameObject road, skyscraper, house;
 
     private List<Vector2> m_points;
 	private List<LineSegment> m_edges = null;
@@ -64,10 +64,10 @@ public class VoronoiDemo : MonoBehaviour
 			r.transform.LookAt(rightScaled);
 			r.transform.localScale = new Vector3(r.transform.localScale.x, r.transform.localScale.y, size);
 			r.transform.position = (leftScaled + rightScaled) / 2;
-      buildNearHouses((left/ WIDTH * 10 - new Vector2(5f,5f)) * 1, (right/ WIDTH * 10 - new Vector2(5f,5f)) * 1);  
+      buildNearHouses((left/ WIDTH * 10 - new Vector2(5f,5f)) * 1, (right/ WIDTH * 10 - new Vector2(5f,5f)) * 1, size);  
 			//DrawLine (pixels, left, right, color);
 		}
-	 void buildNearHousesOneSide(Vector2 v1, Vector2 v2)
+	 void buildNearHousesOneSide(Vector2 v1, Vector2 v2, float sz)
     {
 		Vector2 pointer = v2 - v1;
 		float rnb = Vector2.Distance(v1, v2) / 0.30f; // Maximum number of buildings
@@ -77,26 +77,37 @@ public class VoronoiDemo : MonoBehaviour
         {
         
 			float randpos = 0.6f;//Random.value; 0.8
-      Debug.Log(randpos);
 			float rot = Vector2.SignedAngle(Vector2.right, v2 - v1);
 			Vector3 posx = new Vector3(v1.y + randpos * pointer.y, 0, v1.x + randpos * pointer.x);
-			GameObject housex = Instantiate(building, posx, Quaternion.Euler(0, 90 + rot, 0));
-			housesSpawned.Add(housex);
+      
+      if (sz <0.8){
+        Debug.Log(sz);
+        GameObject building = Instantiate(skyscraper, posx, Quaternion.Euler(0, 90 + rot, 0));
+			  housesSpawned.Add(building);
 
+      }
+
+      if (sz >=0.8){
+        Debug.Log(sz);
+        GameObject building = Instantiate(house, posx, Quaternion.Euler(0, 90 + rot, 0));
+			  housesSpawned.Add(house);
+
+      }
+			  
       float randpos2 = 0.67f;//Random.value; 0.8
       Vector3 posx2 = new Vector3(v1.y + randpos2 * pointer.y, 0, v1.x + randpos2 * pointer.x);
-      GameObject housex2 = Instantiate(building, posx2, Quaternion.Euler(0, 90 + rot, 0));
-			housesSpawned.Add(housex2);
+      //GameObject housex2 = Instantiate(building, posx2, Quaternion.Euler(0, 90 + rot, 0));
+			//housesSpawned.Add(housex2);
 
 
 
 		}
 	}
 
-	void buildNearHouses(Vector2 v1, Vector2 v2)
+	void buildNearHouses(Vector2 v1, Vector2 v2, float sz)
 	{
-		buildNearHousesOneSide(v1, v2);
-		buildNearHousesOneSide(v2, v1);
+		buildNearHousesOneSide(v1, v2, sz);
+		buildNearHousesOneSide(v2, v1, sz);
 	}
 
 /*
