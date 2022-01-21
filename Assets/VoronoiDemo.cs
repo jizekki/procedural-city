@@ -14,7 +14,7 @@ public class VoronoiDemo : MonoBehaviour
   public const int NPOINTS = 60;
   public const int WIDTH = 200;
   public const int HEIGHT = 200;
-	public GameObject road, bicycleRoad, skyscraper, house, car;
+	public GameObject road, bicycleRoad, skyscraper, house, car, bike;
 
   private List<Vector2> m_points;
 	private List<LineSegment> m_edges = null;
@@ -91,6 +91,9 @@ public class VoronoiDemo : MonoBehaviour
         land.SetTexture ("_MainTex", tx);
 		tx.SetPixels (pixels);
 		tx.Apply ();
+
+    Instantiate(bike, bike.transform.position, Quaternion.identity);
+
 
 	}
 
