@@ -2,22 +2,29 @@ using UnityEngine;
 using System.Collections.Generic;
 using Delaunay;
 using Delaunay.Geo;
+using UnityEngine.AI;
+
+
 
 public class VoronoiDemo : MonoBehaviour
 {
 
-    public Material land;
-    public Texture2D tx;
-    public const int NPOINTS = 60;
-    public const int WIDTH = 200;
-    public const int HEIGHT = 200;
-	public GameObject road, bicycleRoad, skyscraper, house;
+  public Material land;
+  public Texture2D tx;
+  public const int NPOINTS = 60;
+  public const int WIDTH = 200;
+  public const int HEIGHT = 200;
+	public GameObject road, bicycleRoad, skyscraper, house, car;
 
-    private List<Vector2> m_points;
+  private List<Vector2> m_points;
 	private List<LineSegment> m_edges = null;
 	private List<LineSegment> m_spanningTree;
 	private List<LineSegment> m_delaunayTriangulation;
 	private List<GameObject> housesSpawned = new List<GameObject>();
+  public NavMeshSurface surface;
+
+
+
 
     private float [,] createMap() 
     {
@@ -30,8 +37,8 @@ public class VoronoiDemo : MonoBehaviour
 
 	void Start ()
 	{
-        float [,] map=createMap();
-        Color[] pixels = createPixelMap(map);
+    float [,] map=createMap();
+    Color[] pixels = createPixelMap(map);
 		//Debug.Log(pixels[0]);
         /* Create random points points */
 		m_points = new List<Vector2> ();
@@ -72,7 +79,21 @@ public class VoronoiDemo : MonoBehaviour
 			r.transform.position = (leftScaled + rightScaled) / 2;
       buildNearHouses((left/ WIDTH * 10 - new Vector2(5f,5f)) * 1, (right/ WIDTH * 10 - new Vector2(5f,5f)) * 1, size);  
 			//DrawLine (pixels, left, right, color);
+      Instantiate(car, r.transform.position, Quaternion.identity);
+
+      surface = GetComponent<NavMeshSurface>();
+      surface.BuildNavMesh();
 		}
+
+		color = Color.red;
+        /* Apply pixels to texture */
+        tx = new Texture2D(WIDTH, HEIGHT);
+        land.SetTexture ("_MainTex", tx);
+		tx.SetPixels (pixels);
+		tx.Apply ();
+
+	}
+
 	 void buildNearHousesOneSide(Vector2 v1, Vector2 v2, float sz)
     {
 		Vector2 pointer = v2 - v1;
@@ -110,17 +131,6 @@ public class VoronoiDemo : MonoBehaviour
 		buildNearHousesOneSide(v1, v2, sz);
 		buildNearHousesOneSide(v2, v1, sz);
 	}
-
-		color = Color.red;
-        /* Apply pixels to texture */
-        tx = new Texture2D(WIDTH, HEIGHT);
-        land.SetTexture ("_MainTex", tx);
-		tx.SetPixels (pixels);
-		tx.Apply ();
-
-	}
-
-
 
     /* Functions to create and draw on a pixel array */
     private Color[] createPixelMap(float[,] map)
