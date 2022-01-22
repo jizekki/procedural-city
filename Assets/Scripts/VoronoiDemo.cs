@@ -9,19 +9,19 @@ using UnityEngine.AI;
 public class VoronoiDemo : MonoBehaviour
 {
 
-  public Material land;
-  public Texture2D tx;
-  public const int NPOINTS = 60;
-  public const int WIDTH = 200;
-  public const int HEIGHT = 200;
+	public Material land;
+	public Texture2D tx;
+	public const int NPOINTS = 60;
+	public const int WIDTH = 200;
+	public const int HEIGHT = 200;
 	public GameObject road, bicycleRoad, skyscraper, house, car, bike;
 
-  private List<Vector2> m_points;
-	private List<LineSegment> m_edges = null;
+  	private List<Vector2> m_points;
+  	private List<LineSegment> m_edges = null;
 	private List<LineSegment> m_spanningTree;
 	private List<LineSegment> m_delaunayTriangulation;
 	private List<GameObject> housesSpawned = new List<GameObject>();
-  public NavMeshSurface surface;
+  	public NavMeshSurface surface;
 
 
 
@@ -37,12 +37,13 @@ public class VoronoiDemo : MonoBehaviour
 
 	void Start ()
 	{
-    float [,] map=createMap();
-    Color[] pixels = createPixelMap(map);
-		//Debug.Log(pixels[0]);
+    	float [,] map=createMap();
+   	 	Color[] pixels = createPixelMap(map);
+
         /* Create random points points */
 		m_points = new List<Vector2> ();
 		List<uint> colors = new List<uint> ();
+
 		/* Randomly pick vertices */
 		for (int i = 0; i < NPOINTS; i++) {
 			colors.Add ((uint)0);
@@ -65,24 +66,28 @@ public class VoronoiDemo : MonoBehaviour
 			Vector2 left = (Vector2)seg.p0;
 			Vector3 leftScaled = new Vector3(left.y * 10f / WIDTH - 5f, 0.0f, left.x * 10f / HEIGHT - 5f);
 			GameObject r ;
-      if (i%7==0){
-        r =  GameObject.Instantiate(bicycleRoad, leftScaled, Quaternion.identity);
-      }
-      else {
-        r = GameObject.Instantiate(road, leftScaled, Quaternion.identity);
-      }
+			if (i%7==0){
+				r =  GameObject.Instantiate(bicycleRoad, leftScaled, Quaternion.identity);
+			}
+			else {
+				r = GameObject.Instantiate(road, leftScaled, Quaternion.identity);
+			}
 			Vector2 right = (Vector2)seg.p1;
 			Vector3 rightScaled = new Vector3(right.y * 10f / WIDTH - 5f, r.transform.position.y, right.x * 10f / HEIGHT - 5f);
 			float size = Vector2.Distance(new Vector2(left.x * 10f / WIDTH, left.y * 10f / HEIGHT), new Vector2(right.x * 10f / WIDTH, right.y * 10f / HEIGHT));
 			r.transform.LookAt(rightScaled);
 			r.transform.localScale = new Vector3(r.transform.localScale.x, r.transform.localScale.y, size);
 			r.transform.position = (leftScaled + rightScaled) / 2;
-      buildNearHouses((left/ WIDTH * 10 - new Vector2(5f,5f)) * 1, (right/ WIDTH * 10 - new Vector2(5f,5f)) * 1, size);  
-			//DrawLine (pixels, left, right, color);
-      Instantiate(car, r.transform.position, Quaternion.identity);
+      		buildNearHouses((left/ WIDTH * 10 - new Vector2(5f,5f)) * 1, (right/ WIDTH * 10 - new Vector2(5f,5f)) * 1, size);  
+			
+			if (Random.Range(0.0f, 1.0f) <= 0.5) {
+				Instantiate(car, r.transform.position, Quaternion.identity);
+			} else {
+				Instantiate(bike, r.transform.position, Quaternion.identity);
+			}
 
-      surface = GetComponent<NavMeshSurface>();
-      surface.BuildNavMesh();
+			surface = GetComponent<NavMeshSurface>();
+			surface.BuildNavMesh();
 		}
 
 		color = Color.red;
@@ -92,8 +97,7 @@ public class VoronoiDemo : MonoBehaviour
 		tx.SetPixels (pixels);
 		tx.Apply ();
 
-    Instantiate(bike, bike.transform.position, Quaternion.identity);
-
+    	Instantiate(bike, bike.transform.position, Quaternion.identity);
 
 	}
 
