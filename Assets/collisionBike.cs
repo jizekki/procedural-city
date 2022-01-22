@@ -23,7 +23,7 @@ public class collisionBike : MonoBehaviour
     void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.tag == "Car") {
-          Debug.Log("Collision");
+          //Debug.Log("Collision");
             List<GameObject> listcars = GetComponent<carScript>().map.targetCars;
             if (!listcars.Contains(collision.gameObject)) {
                 listcars.Add(collision.gameObject);
@@ -35,7 +35,7 @@ public class collisionBike : MonoBehaviour
                 if (!listbikes.Contains(gameObject)){
                     listbikes.Add(gameObject);
                 }
-            Debug.Log("azeaze");
+            //Debug.Log("azeaze");
             }
         }
 
