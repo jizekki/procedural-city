@@ -14,7 +14,7 @@ public class VoronoiDemo : MonoBehaviour
   public const int NPOINTS = 60;
   public const int WIDTH = 200;
   public const int HEIGHT = 200;
-	public GameObject road, bicycleRoad, skyscraper, house, car, bike;
+	public GameObject road, bicycleRoad, skyscraper, house, car, bike, healingCar;
 
   private List<Vector2> m_points;
 	private List<LineSegment> m_edges = null;
@@ -22,6 +22,10 @@ public class VoronoiDemo : MonoBehaviour
 	private List<LineSegment> m_delaunayTriangulation;
 	private List<GameObject> housesSpawned = new List<GameObject>();
   public NavMeshSurface surface;
+   public List<GameObject> targetCars = new List<GameObject>();
+  public List<GameObject> targetBikes = new List<GameObject>();
+
+
 
 
 
@@ -37,6 +41,10 @@ public class VoronoiDemo : MonoBehaviour
 
 	void Start ()
 	{
+    car.GetComponent<carScript>().map = this;
+    bike.GetComponent<carScript>().map = this;
+    healingCar.GetComponent<healingCar>().map = this;
+
     float [,] map=createMap();
     Color[] pixels = createPixelMap(map);
 		//Debug.Log(pixels[0]);
@@ -67,6 +75,8 @@ public class VoronoiDemo : MonoBehaviour
 			GameObject r ;
       if (i%7==0){
         r =  GameObject.Instantiate(bicycleRoad, leftScaled, Quaternion.identity);
+        Instantiate(car, r.transform.position, Quaternion.identity);
+      Instantiate(bike, r.transform.position, Quaternion.identity);
       }
       else {
         r = GameObject.Instantiate(road, leftScaled, Quaternion.identity);
@@ -79,8 +89,7 @@ public class VoronoiDemo : MonoBehaviour
 			r.transform.position = (leftScaled + rightScaled) / 2;
       buildNearHouses((left/ WIDTH * 10 - new Vector2(5f,5f)) * 1, (right/ WIDTH * 10 - new Vector2(5f,5f)) * 1, size);  
 			//DrawLine (pixels, left, right, color);
-      Instantiate(car, r.transform.position, Quaternion.identity);
-
+      
       surface = GetComponent<NavMeshSurface>();
       surface.BuildNavMesh();
 		}
@@ -92,7 +101,7 @@ public class VoronoiDemo : MonoBehaviour
 		tx.SetPixels (pixels);
 		tx.Apply ();
 
-    Instantiate(bike, bike.transform.position, Quaternion.identity);
+    Instantiate(healingCar, healingCar.transform.position, Quaternion.identity);
 
 
 	}
@@ -112,7 +121,6 @@ public class VoronoiDemo : MonoBehaviour
       
       if (sz <0.8){ // if road size < 0.8 => concentration of population => concentration of skyscrapers (not always true)
         // Area of Skyscrapers
-        Debug.Log(sz);
         GameObject building = Instantiate(skyscraper, posx, Quaternion.Euler(0, 90 + rot, 0));
 			  housesSpawned.Add(building);
 
@@ -120,7 +128,6 @@ public class VoronoiDemo : MonoBehaviour
 
       if (sz >=0.8){
         // Area of houses
-        Debug.Log(sz);
         GameObject building = Instantiate(house, posx, Quaternion.Euler(0, 90 + rot, 0));
 			  housesSpawned.Add(house);
 
