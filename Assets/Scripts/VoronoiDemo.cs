@@ -11,7 +11,7 @@ public class VoronoiDemo : MonoBehaviour
 
 	public Material land;
 	public Texture2D tx;
-	public const int NPOINTS = 60;
+	public const int NPOINTS = 100;
 	public const int WIDTH = 200;
 	public const int HEIGHT = 200;
 	public GameObject carRoad, bicycleRoad, skyscraper, house, car, bike, police, ambulance;
@@ -22,8 +22,7 @@ public class VoronoiDemo : MonoBehaviour
 	private List<LineSegment> m_delaunayTriangulation;
 	private List<GameObject> housesSpawned = new List<GameObject>();
 
-	private List<GameObject> carRoads;
-	private List<GameObject> bicycleRoads;
+	private List<GameObject> listRoads;
 
 
 
@@ -38,7 +37,7 @@ public class VoronoiDemo : MonoBehaviour
     }
 
 
-	List<GameObject> generateRoads(float [,] map, Color[] pixels, GameObject roadtype) {
+	List<GameObject> generateRoads(float [,] map, Color[] pixels) {
 
 		List<GameObject> listRoads = new List<GameObject>();
 
@@ -66,14 +65,20 @@ public class VoronoiDemo : MonoBehaviour
 			LineSegment seg = m_edges [i];				
 			Vector2 left = (Vector2)seg.p0;
 			Vector3 leftScaled = new Vector3(left.y * 10f / WIDTH - 5f, 0.0f, left.x * 10f / HEIGHT - 5f);
-			GameObject r = GameObject.Instantiate(roadtype, leftScaled, Quaternion.identity);
+			GameObject r;
+
+			if(Random.Range(0.0f, 1.0f) < 0.8f) {
+				r = GameObject.Instantiate(carRoad, leftScaled, Quaternion.identity);
+			} else {
+				r = GameObject.Instantiate(bicycleRoad, leftScaled, Quaternion.identity);
+			}
 			Vector2 right = (Vector2)seg.p1;
 			Vector3 rightScaled = new Vector3(right.y * 10f / WIDTH - 5f, r.transform.position.y, right.x * 10f / HEIGHT - 5f);
 			float size = Vector2.Distance(new Vector2(left.x * 10f / WIDTH, left.y * 10f / HEIGHT), new Vector2(right.x * 10f / WIDTH, right.y * 10f / HEIGHT));
 			r.transform.LookAt(rightScaled);
 			r.transform.localScale = new Vector3(r.transform.localScale.x, r.transform.localScale.y, size);
 			r.transform.position = (leftScaled + rightScaled) / 2;
-      		//buildNearHouses((left/ WIDTH * 10 - new Vector2(5f,5f)) * 1, (right/ WIDTH * 10 - new Vector2(5f,5f)) * 1, size);
+      		buildNearHouses((left/ WIDTH * 10 - new Vector2(5f,5f)) * 1, (right/ WIDTH * 10 - new Vector2(5f,5f)) * 1, size);
 
 			listRoads.Add(r);
 
@@ -84,31 +89,28 @@ public class VoronoiDemo : MonoBehaviour
 
 	void Start ()
 	{
-    	float [,] map_1 = createMap();
-		float [,] map_2 = createMap();
+    	float [,] map = createMap();
 
-		carRoads = generateRoads(map_1, createPixelMap(map_1), carRoad);
-		bicycleRoads = generateRoads(map_2, createPixelMap(map_2), bicycleRoad);
+		listRoads = generateRoads(map, createPixelMap(map));
 
 		foreach(NavMeshSurface surface in GetComponents<NavMeshSurface>()) {
             surface.BuildNavMesh();
         }
 
-		for(int i=0; i< 10; i++) {
-			GameObject r = carRoads[Random.Range(0, carRoads.Count)];
+		for(int i=0; i< 20; i++) {
+			GameObject r = listRoads[Random.Range(0, listRoads.Count)];
 			if(i == 0) {
 				Instantiate(ambulance, r.transform.position, Quaternion.identity);
 			} else if (i == 1) {
-				Instantiate(police, r.transform.position, Quaternion.identity);
+				GameObject policeCar = Instantiate(police, r.transform.position, Quaternion.identity) as GameObject;
+				policeCar.GetComponent<NavMeshAgent>().speed *= 1.5f;
 			} else {
-				Instantiate(car, r.transform.position, Quaternion.identity);
+				if(Random.Range(0.0f, 1.0f) < 0.8f) {
+					Instantiate(car, r.transform.position, Quaternion.identity);
+				} else {
+					Instantiate(bike, r.transform.position, Quaternion.identity);
+				}
 			}
-		}
-
-
-		for(int i=0; i< 10; i++) {
-			GameObject r = bicycleRoads[Random.Range(0, bicycleRoads.Count)];
-			Instantiate(bike, r.transform.position, Quaternion.identity);
 		}
 
 	}
@@ -118,7 +120,6 @@ public class VoronoiDemo : MonoBehaviour
 		Vector2 pointer = v2 - v1;
 		float rnb = Vector2.Distance(v1, v2) / 0.30f; // Maximum number of buildings
 		int lenRdm = (int)rnb;
-		//List<float> rdmP = new List<float>;
 		for (int k = 0; k < lenRdm; k++)
         {
         
@@ -126,9 +127,7 @@ public class VoronoiDemo : MonoBehaviour
 			float rot = Vector2.SignedAngle(Vector2.right, v2 - v1);
 			Vector3 posx = new Vector3(v1.y + randpos * pointer.y, 0, v1.x + randpos * pointer.x);
       
-      if (sz <0.8){ // if road size < 0.8 => concentration of population => concentration of skyscrapers (not always true)
-        // Area of Skyscrapers
-        // Debug.Log(sz);
+      if (sz <0.8){
         GameObject building = Instantiate(skyscraper, posx, Quaternion.Euler(0, 90 + rot, 0));
 			  housesSpawned.Add(building);
 
