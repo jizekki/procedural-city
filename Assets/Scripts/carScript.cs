@@ -7,6 +7,7 @@ public class carScript : MonoBehaviour
 {
     Vector3 destination;
     NavMeshAgent car;
+    public bool isCriminal;
     
     // Start is called before the first frame update
     void Start()
@@ -15,6 +16,7 @@ public class carScript : MonoBehaviour
         //Instantiate(car, new Vector3(0.0f, 0, 0.0f), Quaternion.identity);
         car = GetComponent<NavMeshAgent>();
         destination = car.destination;
+        isCriminal = false;
 
     }
 
@@ -27,6 +29,19 @@ public class carScript : MonoBehaviour
         {
             destination = target;
             car.destination = destination;
+        }
+    }
+
+    void OnCollisionEnter(Collision collision)
+    {
+        if(car != null) {
+            if (collision.gameObject.tag == "Bike") {
+                isCriminal = true;
+            }
+            else if (collision.gameObject.tag == "Police" && isCriminal) {
+                Destroy(gameObject);
+                Debug.Log("Cought by police, proceed to destroy");
+            }
         }
     }
 }

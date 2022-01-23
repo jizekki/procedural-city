@@ -7,7 +7,7 @@ public class bikeScript : MonoBehaviour
 {
     Vector3 destination;
     NavMeshAgent bike;
-    bool stopped = false;
+    public bool stopped = false;
 
     // Start is called before the first frame update
     void Start()
@@ -31,20 +31,16 @@ public class bikeScript : MonoBehaviour
 
     void OnCollisionEnter(Collision collision)
     {
-        bike.gameObject.GetComponent<NavMeshAgent>().isStopped = true;
-        stopped = true;
-        if (collision.gameObject.tag == "Car") {
-            Debug.Log("Collision with a car detected");
-            List<GameObject> listcars = new List<GameObject>(GameObject.FindGameObjectsWithTag("Car"));
-            if (!listcars.Contains(collision.gameObject)) {
-                listcars.Add(collision.gameObject);
+        if(bike != null) {
+            if (collision.gameObject.tag == "Car") {
+                stopped = true;
+                bike.gameObject.GetComponent<NavMeshAgent>().isStopped = true;
+                Debug.Log("Collision of a bike with a car detected");
             }
-        }
-
-        else if (collision.gameObject.tag == "Ambulance") {
-            Debug.Log("Collision with ambulance not implemented");
-        } else {
-            Debug.Log("Collision object does not have a valid tag");
+            else if (collision.gameObject.tag == "Ambulance") {
+                stopped = false;
+                Debug.Log("Collision of a bike with an ambulance");
+            }
         }
     }
 }

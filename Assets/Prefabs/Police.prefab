@@ -59,5 +59,26 @@ PrefabInstance:
       propertyPath: m_Name
       value: Police
       objectReference: {fileID: 0}
+    - target: {fileID: 8738121113683056748, guid: 335273cf2c90f41098930742e63140ce, type: 3}
+      propertyPath: m_TagString
+      value: Police
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 335273cf2c90f41098930742e63140ce, type: 3}
+--- !u!1 &5257443469322516900 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8738121113683056748, guid: 335273cf2c90f41098930742e63140ce, type: 3}
+  m_PrefabInstance: {fileID: 3580988570724278728}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &2791470493649257000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5257443469322516900}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 72879d819563646789737be3f3e987c9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

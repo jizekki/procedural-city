@@ -14,7 +14,7 @@ public class VoronoiDemo : MonoBehaviour
 	public const int NPOINTS = 60;
 	public const int WIDTH = 200;
 	public const int HEIGHT = 200;
-	public GameObject road, bicycleRoad, skyscraper, house, car, bike;
+	public GameObject road, bicycleRoad, skyscraper, house, car, bike, police, ambulance;
 
   	private List<Vector2> m_points;
   	private List<LineSegment> m_edges = null;
@@ -61,6 +61,10 @@ public class VoronoiDemo : MonoBehaviour
 
 		Color color = Color.blue;
 		/* Shows Voronoi diagram */
+
+		bool existPolice = false;
+		bool existAmbulance = false;
+
 		for (int i = 0; i < m_edges.Count; i++) {
 			LineSegment seg = m_edges [i];				
 			Vector2 left = (Vector2)seg.p0;
@@ -78,12 +82,19 @@ public class VoronoiDemo : MonoBehaviour
 			r.transform.LookAt(rightScaled);
 			r.transform.localScale = new Vector3(r.transform.localScale.x, r.transform.localScale.y, size);
 			r.transform.position = (leftScaled + rightScaled) / 2;
-      		buildNearHouses((left/ WIDTH * 10 - new Vector2(5f,5f)) * 1, (right/ WIDTH * 10 - new Vector2(5f,5f)) * 1, size);  
-			
-			if (Random.Range(0.0f, 1.0f) <= 0.5) {
-				Instantiate(car, r.transform.position, Quaternion.identity);
+      		buildNearHouses((left/ WIDTH * 10 - new Vector2(5f,5f)) * 1, (right/ WIDTH * 10 - new Vector2(5f,5f)) * 1, size);
+
+			if(i == 0) {
+				Instantiate(ambulance, r.transform.position, Quaternion.identity);
+			} else if (i == 1) {
+				Instantiate(police, r.transform.position, Quaternion.identity);
 			} else {
-				Instantiate(bike, r.transform.position, Quaternion.identity);
+				double random = Random.Range(0.0f, 1.0f);
+				if (random < 0.3) {
+					Instantiate(car, r.transform.position, Quaternion.identity);
+				} else if (0.3 <= random && random < 0.6 ){
+					Instantiate(bike, r.transform.position, Quaternion.identity);
+				}
 			}
 
 			surface = GetComponent<NavMeshSurface>();
@@ -116,7 +127,7 @@ public class VoronoiDemo : MonoBehaviour
       
       if (sz <0.8){ // if road size < 0.8 => concentration of population => concentration of skyscrapers (not always true)
         // Area of Skyscrapers
-        Debug.Log(sz);
+        // Debug.Log(sz);
         GameObject building = Instantiate(skyscraper, posx, Quaternion.Euler(0, 90 + rot, 0));
 			  housesSpawned.Add(building);
 
@@ -124,7 +135,7 @@ public class VoronoiDemo : MonoBehaviour
 
       if (sz >=0.8){
         // Area of houses
-        Debug.Log(sz);
+        // Debug.Log(sz);
         GameObject building = Instantiate(house, posx, Quaternion.Euler(0, 90 + rot, 0));
 			  housesSpawned.Add(house);
 

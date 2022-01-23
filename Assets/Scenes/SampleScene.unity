@@ -165,6 +165,8 @@ MonoBehaviour:
   house: {fileID: 8995980070935561679, guid: cf42bfa4a2c1a4d338c07e40c15b7659, type: 3}
   car: {fileID: 3555405780034833708, guid: ea7df271deb904727a4f25d771876465, type: 3}
   bike: {fileID: 6974065688351923531, guid: 3e7dcb6fd13c2445da79f6625f8d8fe9, type: 3}
+  police: {fileID: 5257443469322516900, guid: 30d64281ed4cd4b408e16f316b526286, type: 3}
+  ambulance: {fileID: 8738121113683056748, guid: 335273cf2c90f41098930742e63140ce, type: 3}
   surface: {fileID: 0}
 --- !u!64 &578555526
 MeshCollider:
