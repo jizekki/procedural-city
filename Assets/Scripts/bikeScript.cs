@@ -6,22 +6,23 @@ using UnityEngine.AI;
 public class bikeScript : MonoBehaviour
 {
     NavMeshAgent bike;
-    public bool stopped = false;
+    public bool injured;
 
     // Start is called before the first frame update
     void Start()
     {
         bike = GetComponent<NavMeshAgent>();
+        injured = false;
     }
 
     // Update is called once per frame
     void Update()
     {
-        if(!stopped) {
-            if (bike.remainingDistance < 1.0f)
+        if(!injured) {
+            if (bike.isStopped || bike.remainingDistance < 1.0f)
             {
                 bike.destination = new Vector3(Random.Range(-10.0f, 10.0f), 0, Random.Range(-10.0f, 10.0f));
-            }
+            } 
         }
     }
 
@@ -29,12 +30,14 @@ public class bikeScript : MonoBehaviour
     {
         if(bike != null) {
             if (collision.gameObject.tag == "Car") {
-                stopped = true;
-                bike.gameObject.GetComponent<NavMeshAgent>().isStopped = true;
+                injured = true;
+                bike.isStopped = true;
                 Debug.Log("Collision of a bike with a car detected");
             }
             else if (collision.gameObject.tag == "Ambulance") {
-                stopped = false;
+                injured = false;
+                collision.gameObject.GetComponent<ambulanceScript>().hasMission = false;
+                collision.gameObject.GetComponent<ambulanceScript>().followedBike = null;
                 Debug.Log("Collision of a bike with an ambulance");
             }
         }

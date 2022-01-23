@@ -73,7 +73,7 @@ public class VoronoiDemo : MonoBehaviour
 			r.transform.LookAt(rightScaled);
 			r.transform.localScale = new Vector3(r.transform.localScale.x, r.transform.localScale.y, size);
 			r.transform.position = (leftScaled + rightScaled) / 2;
-      		//buildNearHouses((left/ WIDTH * 10 - new Vector2(5f,5f)) * 1, (right/ WIDTH * 10 - new Vector2(5f,5f)) * 1, size);
+      		buildNearHouses((left/ WIDTH * 10 - new Vector2(5f,5f)) * 1, (right/ WIDTH * 10 - new Vector2(5f,5f)) * 1, size);
 
 			listRoads.Add(r);
 
@@ -99,7 +99,8 @@ public class VoronoiDemo : MonoBehaviour
 			if(i == 0) {
 				Instantiate(ambulance, r.transform.position, Quaternion.identity);
 			} else if (i == 1) {
-				Instantiate(police, r.transform.position, Quaternion.identity);
+				GameObject policeCar = Instantiate(police, r.transform.position, Quaternion.identity) as GameObject;
+				policeCar.GetComponent<NavMeshAgent>().speed *= 1.5f;
 			} else {
 				Instantiate(car, r.transform.position, Quaternion.identity);
 			}
