@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: -203921028414218290}
   - component: {fileID: 6055927566477018180}
   - component: {fileID: -5506047657436918859}
-  m_Layer: 7
+  m_Layer: 0
   m_Name: Car
   m_TagString: Car
   m_Icon: {fileID: 0}
@@ -108,7 +108,7 @@ NavMeshAgent:
   m_Enabled: 1
   m_AgentTypeID: 0
   m_Radius: 0.5
-  m_Speed: 0.8
+  m_Speed: 0.5
   m_Acceleration: 1
   avoidancePriority: 50
   m_AngularSpeed: 500
@@ -132,6 +132,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b939d5e8ab66346fcab3d0fcdeff5636, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isCriminal: 0
 --- !u!54 &-5506047657436918859
 Rigidbody:
   m_ObjectHideFlags: 0

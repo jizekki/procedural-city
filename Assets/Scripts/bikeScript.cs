@@ -5,7 +5,6 @@ using UnityEngine.AI;
 
 public class bikeScript : MonoBehaviour
 {
-    Vector3 destination;
     NavMeshAgent bike;
     public bool stopped = false;
 
@@ -13,18 +12,15 @@ public class bikeScript : MonoBehaviour
     void Start()
     {
         bike = GetComponent<NavMeshAgent>();
-        destination = bike.destination;
     }
 
     // Update is called once per frame
     void Update()
     {
         if(!stopped) {
-            Vector3 target= new Vector3(Random.Range(-10.0f, 10.0f), 0, Random.Range(-10.0f, 10.0f));
-            if (Vector3.Distance(destination, target) > 1.0f)
+            if (bike.remainingDistance < 1.0f)
             {
-                destination = target;
-                bike.destination = destination;
+                bike.destination = new Vector3(Random.Range(-10.0f, 10.0f), 0, Random.Range(-10.0f, 10.0f));
             }
         }
     }

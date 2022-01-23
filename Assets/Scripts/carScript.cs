@@ -5,7 +5,6 @@ using UnityEngine.AI;
 
 public class carScript : MonoBehaviour
 {
-    Vector3 destination;
     NavMeshAgent car;
     public bool isCriminal;
     
@@ -15,7 +14,6 @@ public class carScript : MonoBehaviour
 
         //Instantiate(car, new Vector3(0.0f, 0, 0.0f), Quaternion.identity);
         car = GetComponent<NavMeshAgent>();
-        destination = car.destination;
         isCriminal = false;
 
     }
@@ -24,11 +22,9 @@ public class carScript : MonoBehaviour
     void Update()
     {
         // Update destination if the target moves one unit
-        Vector3 target = new Vector3(Random.Range(-10.0f, 10.0f), 0, Random.Range(-10.0f, 10.0f));
-        if (Vector3.Distance(destination, target) > 1.0f)
+        if (car.remainingDistance < 1.0f)
         {
-            destination = target;
-            car.destination = destination;
+            car.destination = new Vector3(Random.Range(-10.0f, 10.0f), 0, Random.Range(-10.0f, 10.0f));
         }
     }
 
