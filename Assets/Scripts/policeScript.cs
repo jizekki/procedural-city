@@ -29,7 +29,7 @@ public class policeScript : MonoBehaviour
                     hasMission = true;
                     Debug.Log("Police has now a mission !");
                     followedCar = car.gameObject;
-                    police.destination = followedCar.transform.position;
+                    police.destination = followedCar.gameObject.GetComponent<NavMeshAgent>().destination;
                     break;
                 }
             }
