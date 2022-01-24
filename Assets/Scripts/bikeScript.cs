@@ -6,12 +6,13 @@ using UnityEngine.AI;
 public class bikeScript : MonoBehaviour
 {
     NavMeshAgent bike;
-    public bool stopped = false;
+    public bool stopped;
 
     // Start is called before the first frame update
     void Start()
     {
         bike = GetComponent<NavMeshAgent>();
+        stopped = false;
     }
 
     // Update is called once per frame
@@ -35,7 +36,11 @@ public class bikeScript : MonoBehaviour
             }
             else if (collision.gameObject.tag == "Ambulance") {
                 stopped = false;
-                Debug.Log("Collision of a bike with an ambulance");
+                bike.gameObject.GetComponent<NavMeshAgent>().isStopped = false;
+                collision.gameObject.GetComponent<ambulanceScript>().hasMission = false;
+                collision.gameObject.GetComponent<ambulanceScript>().followedBike = null;
+                Debug.Log("Collision of a bike with an ambulance deteceted");
+                Debug.Log("Ambuance has ended the mission");
             }
         }
     }

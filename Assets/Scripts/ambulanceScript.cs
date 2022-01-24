@@ -8,13 +8,16 @@ public class ambulanceScript : MonoBehaviour
 
 
     NavMeshAgent ambulance;
-    bool hasMission = false;
+    public bool hasMission;
+    public GameObject followedBike;
 
 
     // Start is called before the first frame update
     void Start()
     {
         ambulance = GetComponent<NavMeshAgent>();
+        hasMission = false;
+        followedBike = null;
     }
 
     // Update is called once per frame
@@ -27,7 +30,8 @@ public class ambulanceScript : MonoBehaviour
                 if(bike.GetComponent<bikeScript>().stopped) { 
                     hasMission = true;
                     Debug.Log("Ambulance has now a mission !");
-                    ambulance.destination = bike.gameObject.transform.position;
+                    followedBike = bike.gameObject;
+                    ambulance.destination = followedBike.transform.position;
                     break;
                 }
             }
@@ -35,6 +39,10 @@ public class ambulanceScript : MonoBehaviour
         if(!hasMission) {
             // If no mission is found, a random destination is assigned
             ambulance.destination = new Vector3(Random.Range(-10.0f, 10.0f), 0, Random.Range(-10.0f, 10.0f));
+        } else {
+            if(followedBike != null) {
+                ambulance.destination = followedBike.transform.position;
+            }
         }
     }
 }
